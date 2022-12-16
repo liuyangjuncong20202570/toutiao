@@ -1,0 +1,21 @@
+// 此模块中用于发起登录请求，首先导入之前封装的axios模块
+import request from '@/utils/request.js'
+
+// 封装一个发送请求的参数，之后导入使用,负责获取用户token进行登录
+export const login = (data) => {
+  return request.post('/v1_0/authorizations', data)
+}
+
+// 封装获取短信验证码的模块
+// 发送手机号每分钟只发送一次
+export const sendMSG = (mobile) => {
+  return request.get('/v1_0/sms/codes/:mobile', {
+    params: {
+      mobile
+    }
+  })
+  // return request({
+  //   method: 'GET',
+  //   url: `/v1_0/sms/codes/:mobile${mobile}`
+  // })
+}
