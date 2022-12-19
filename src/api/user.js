@@ -8,14 +8,16 @@ export const login = (data) => {
 
 // 封装获取短信验证码的模块
 // 发送手机号每分钟只发送一次
-export const sendMSG = (mobile) => {
-  return request.get('/v1_0/sms/codes/:mobile', {
-    params: {
-      mobile
-    }
-  })
+export const sendMSG = (data) => {
+  return request.get(`/v1_0/sms/codes/${data}`)
   // return request({
   //   method: 'GET',
   //   url: `/v1_0/sms/codes/:mobile${mobile}`
   // })
+}
+// 获取用户信息
+export const getUserinfo = () => {
+  return request.get('/v1_0/user', {
+    // 注意这个接口需要用户的token授权才能访问，该授权的格式是：Bearer token记住Bearer后面的空格不能省且B大写,该配置已在请求拦截器中配置
+  })
 }

@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
     <!-- 登录导航栏 -->
-    <van-nav-bar class="page-nav-bar" title="登录" />
+    <van-nav-bar
+      class="page-nav-bar"
+      title="登录"
+      left-text="返回"
+      left-arrow
+      @click-left="$router.back()"
+    />
     <!-- 登录表单 -->
     <van-form ref="loginForm" @submit="onSubmit">
       <van-field
@@ -54,6 +60,7 @@
 
       <div class="loginButton">
         <van-button
+          ref="btn"
           class="loginButton-btn"
           block
           type="info"
@@ -124,6 +131,8 @@ export default {
         // 此处的toast之所以能够显示，是因为在vue中toast只能有一个，每出现新一个toast都会把之前的toast给覆盖掉
         this.$toast.success('登陆成功')
         // 通过vuex将返回来的token存至state中的user对象中
+        // 当登陆成功后让页面跳转回原来的页面,但并不严谨
+        this.$router.back()
         this.$store.commit('setUser', data)
         console.log(data)
       } catch (error) {
