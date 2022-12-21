@@ -21,3 +21,7 @@ export const getUserinfo = () => {
     // 注意这个接口需要用户的token授权才能访问，该授权的格式是：Bearer token记住Bearer后面的空格不能省且B大写,该配置已在请求拦截器中配置
   })
 }
+// 获取频道数据
+export const getUserChannels = () => {
+  return request.get('/v1_0/channels')
+}

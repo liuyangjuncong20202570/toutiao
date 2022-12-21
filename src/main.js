@@ -9,6 +9,8 @@ import vant from 'vant'
 import 'vant/lib/index.css'
 // 引入amfe-flexible用于动态调整rem基准值
 import 'amfe-flexible'
+// 加载dayjs初始化配置
+import '@/utils/dayjs.js'
 // 3. 注册你需要的组件
 Vue.use(vant)
 
