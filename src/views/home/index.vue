@@ -18,32 +18,52 @@
     <!-- 通过 swipeable 属性可以开启滑动切换标签页。 -->
     <!-- 标签组件本身具有的功能就是懒渲染，只有用户第一次查看组件的时候才会渲染上去 -->
     <van-tabs class="channel-tab" v-model="active" animated swipeable>
-      <van-tab v-for="item in channels" :key="item.id" :title="item.name">
+      <van-tab
+        v-for="item in $store.state.channels"
+        :key="item.id"
+        :title="item.name"
+      >
         <!-- 文章列表 -->
         <ArticalList :channel="item"></ArticalList>
       </van-tab>
       <!-- 该元素的作用是汉堡图标的占位符，以免导航栏滑动位移不够出现被图标遮住的情况 -->
       <div class="placeholder" slot="nav-right"></div>
-      <div class="hamburger-btn" slot="nav-right">
+      <div @click="isChannelshow = true" class="hamburger-btn" slot="nav-right">
         <i class="lyjc lyjc-gengduo"></i>
       </div>
     </van-tabs>
     <!-- /标签栏 -->
+    <!-- 频道编辑按钮 -->
+    <van-popup
+      close-icon-position="top-left"
+      v-model="isChannelshow"
+      closeable
+      position="bottom"
+      :style="{ height: '100%' }"
+    >
+      <ChannelEdit :active="active" @updateActive="updateActive"></ChannelEdit>
+    </van-popup>
+    <!-- /频道编辑按钮 -->
   </div>
 </template>
 
 <script>
+import ChannelEdit from '@/views/home/components/channel-edit.vue'
 import ArticalList from './components/artical-list.vue'
 import { getUserChannels } from '@/api/user.js'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage.js'
 export default {
   components: {
-    ArticalList
+    ArticalList,
+    ChannelEdit
   },
+  computed: { ...mapState(['user']) },
   name: 'homeIndex',
   data() {
     return {
       active: 0,
-      channels: ''
+      isChannelshow: false // 控制频道编辑目录是否出现
     }
   },
   created() {
@@ -51,12 +71,34 @@ export default {
   },
   methods: {
     async getUserChannel() {
-      const {
-        data: {
-          data: { channels }
+      if (this.user) {
+        // 已登录，请求获取用户数据
+        const {
+          data: {
+            data: { channels }
+          }
+        } = await getUserChannels()
+        this.$store.commit('getChannels', channels)
+      } else {
+        // 未登录判断是否有本地存储频道数据
+        if (getItem('localChanels')) {
+          //   有，直接存进vuex中
+          this.$store.commit('getChannels', getItem('localChanels'))
+        } else {
+          //   无，则获取推荐用户频道（默认值）
+          const {
+            data: {
+              data: { channels }
+            }
+          } = await getUserChannels()
+          this.$store.commit('getChannels', channels)
         }
-      } = await getUserChannels()
-      this.channels = channels
+      }
+    },
+    // 给自己定义的自定义事件注册的事件处理函数定义一个含默认值的参数，控制弹出层是否出现
+    updateActive(val, isChannelshow = true) {
+      this.active = val
+      this.isChannelshow = isChannelshow
     }
   }
 }

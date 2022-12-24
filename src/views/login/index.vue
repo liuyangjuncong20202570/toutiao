@@ -134,10 +134,8 @@ export default {
         // 当登陆成功后让页面跳转回原来的页面,但并不严谨
         this.$router.back()
         this.$store.commit('setUser', data)
-        console.log(data)
       } catch (error) {
         if (error.response.status === 400) {
-          console.log('手机号或验证码错误')
           this.$toast.fail('手机号或验证码错误')
         } else {
           this.$toast.fail('未知错误，请稍后再试')
