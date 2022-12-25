@@ -10,7 +10,8 @@ export default new Vuex.Store({
     // 此步骤中为什么要给TOKEN_KEY设置一个常量，就是为了防止万一本地存储中获取数据时把键给写错了，万一写错了程序会报错，方便检查
     // 因为本地存储中存储的是json格式，所以在给user赋值时要把格式转换回来
     user: getItem(TOKEN_KEY),
-    channels: []
+    channels: [],
+    searchHistories: getItem('TOUIAO_HISTORIES') || []// 搜索记录数组
   },
   getters: {},
   mutations: {
@@ -28,6 +29,15 @@ export default new Vuex.Store({
     },
     removeChannels(state, payload) {
       state.channels.splice(payload, 1)
+    },
+    setsearchHistories(state, payload) {
+      state.searchHistories.unshift(payload)
+    },
+    removesearchHistories(state, payload) {
+      state.searchHistories.splice(payload, 1)
+    },
+    deleteAllhistories(state) {
+      state.searchHistories = []
     }
   },
   actions: {},

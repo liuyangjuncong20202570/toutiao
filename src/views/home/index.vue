@@ -3,6 +3,7 @@
     <!-- 导航栏 -->
     <van-nav-bar class="page-nav-bar" fixed>
       <van-button
+        to="/search"
         class="search-btn"
         slot="title"
         type="info"

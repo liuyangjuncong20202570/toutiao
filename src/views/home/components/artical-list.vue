@@ -96,7 +96,8 @@ export default {
         // 展示错误提示状态
         this.error = true
         // 请求失败了，loading也需要关闭
-        this.loading = false
+        this.isLoading = false
+        this.finished = true
         // console.log('失败')
       }
     },
@@ -118,8 +119,10 @@ export default {
         // 更新成功后显示更新成功文本
         this.refreshText = `刷新成功，更新${results.length}条数据`
       } catch (error) {
+        this.error = true
         this.isLoading = false
         this.refreshText = '刷新失败'
+        this.finished = true
       }
     }
   }
