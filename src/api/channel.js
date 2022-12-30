@@ -11,5 +11,5 @@ export const Onlinechannels = (data) => {
 }
 // 删除已登录用户的频道数据
 export const deleteOnlinechannels = (data) => {
-  return request.delete(`/v1_0/user/channels/:${data}`)
+  return request.delete(`/v1_0/user/channels/${data}`)
 }

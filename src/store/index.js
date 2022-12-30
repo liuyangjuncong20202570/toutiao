@@ -11,7 +11,7 @@ export default new Vuex.Store({
     // 因为本地存储中存储的是json格式，所以在给user赋值时要把格式转换回来
     user: getItem(TOKEN_KEY),
     channels: [],
-    searchHistories: getItem('TOUIAO_HISTORIES') || []// 搜索记录数组
+    searchHistories: getItem('TOUIAO_HISTORIES') || [] // 搜索记录数组
   },
   getters: {},
   mutations: {

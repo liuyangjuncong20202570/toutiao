@@ -1,5 +1,16 @@
 <template>
-  <van-cell class="articalItem">
+  <van-cell
+    :to="{
+      // 根据配置的路由名称配置跳转属性
+      name: 'artical',
+      // 原理是动态路由会将值挂载到$route对象上的params属性上
+      params: {
+        articalId: artical.art_id
+      }
+    }"
+    class="articalItem"
+  >
+    <!-- 多行文字只显示两行 -->
     <div slot="title" class="title van-multi-ellipsis--l2">
       {{ artical.title }}
     </div>

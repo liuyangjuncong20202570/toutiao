@@ -1,7 +1,19 @@
 import axios from 'axios'
 import store from '@/store'
+import JSONBIG from 'json-bigint'
 const request = axios.create({
-  baseURL: 'http://toutiao.itheima.net'
+  baseURL: 'http://toutiao.itheima.net',
+  // 以下语句是axios内部的让你自定义后端返回的原始数据
+  // 因为axios会自动返回json.parse()后端原始数据，所以如果数据超过js的安全数据范围，那么值就不准确
+  // 所以此时的art_id也就不是真正的art_id，所以如果让axios在处理后端数据之前就让超过js安全数据范围的值返回json-big.parse()那么这样获取的值就正确
+  // 如果没有超过就让他返回正确的值。
+  transformResponse: [function(data) {
+    try {
+      return JSONBIG.parse(data)
+    } catch (error) {
+      return data
+    }
+  }]
 })
 // 配置请求拦截器，给所有的接口在发送请求时配置上headers
 request.interceptors.request.use(

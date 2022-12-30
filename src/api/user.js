@@ -25,3 +25,12 @@ export const getUserinfo = () => {
 export const getUserChannels = () => {
   return request.get('/v1_0/user/channels')
 }
+// 添加关注用户
+export const subscribeUser = (target) => {
+  return request.post('/v1_0/user/followings', { target })
+}
+
+// 取消关注用户
+export const unsubscribeUser = (target) => {
+  return request.delete(`/v1_0/user/followings/${target}`)
+}
