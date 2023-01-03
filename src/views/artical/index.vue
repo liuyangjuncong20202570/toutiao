@@ -74,12 +74,46 @@
         ></div>
         <van-divider>正文结束</van-divider>
         <!-- 关于此处底部区域，应该在整个页面文章主体都渲染完成后，也就是请求发起成功后才显示底部栏 -->
+
+        <!-- 底部评论区 -->
+        <commentList
+          :list="commentList"
+          :articalId="list.art_id"
+          @total-count="totalCount"
+          @reply-click="onReplyclick"
+        ></commentList>
+        <!-- /底部评论区 -->
+
+        <!-- 底部发表评论区 -->
+        <van-popup v-model="isCommentshow" position="bottom">
+          <postComment
+            :target="list.art_id"
+            @post-comment="onPost"
+          ></postComment>
+        </van-popup>
+        <!-- /底部发表评论区 -->
+        <!-- 评论回复区 -->
+        <van-popup v-model="isReplyshow" position="bottom">
+          <!-- 因为弹出层组件是一个懒渲染组件，所以绑定v-if可以让该组件动态变化 -->
+          <commentReply
+            v-if="isReplyshow"
+            :comment="replyComment"
+            :articalId="articalId"
+            @close="isReplyshow = false"
+          ></commentReply>
+        </van-popup>
+        <!-- /评论回复区 -->
         <!-- 底部区域 -->
         <div class="article-bottom">
-          <van-button class="comment-btn" type="default" round size="small"
+          <van-button
+            class="comment-btn"
+            type="default"
+            round
+            size="small"
+            @click="isCommentshow = true"
             >写评论</van-button
           >
-          <van-icon name="comment-o" badge="123" color="#777" />
+          <van-icon name="comment-o" :badge="like" color="#777" />
           <!-- 收藏 -->
           <collectArtical
             :articalId="list.art_id"
@@ -120,6 +154,9 @@
 </template>
 
 <script>
+import commentReply from '@/views/artical/component/commentreply.vue'
+import postComment from '@/views/artical/component/postcomment.vue'
+import commentList from '@/views/artical/component/comment-list.vue'
 import dislikeArtical from '@/components/dislike'
 import likeArtical from '@/components/like'
 import collectArtical from '@/components/collect-artical'
@@ -128,7 +165,15 @@ import { time } from '@/utils/dayjs.js'
 import { getArticalDetails } from '@/api/artical.js'
 import { ImagePreview } from 'vant'
 export default {
-  components: { subscribeUser, collectArtical, likeArtical, dislikeArtical },
+  components: {
+    subscribeUser,
+    collectArtical,
+    likeArtical,
+    dislikeArtical,
+    commentList,
+    postComment,
+    commentReply
+  },
   name: 'ArticleIndex',
   props: {
     articalId: {
@@ -141,7 +186,12 @@ export default {
       list: {},
       loading: true,
       errStatus: 0, // 错误状态码
-      isLoading: false // 默认关注按钮的加载状态为false
+      isLoading: false, // 默认关注按钮的加载状态为false
+      isCommentshow: false, // 控制底部评论区是否弹出
+      commentList: [], // 文章评论列表
+      like: 0, // 评论总数量
+      isReplyshow: false, // 评论回复弹层
+      replyComment: {} // 回复评论对象
     }
   },
   computed: {},
@@ -194,6 +244,18 @@ export default {
     },
     getTime(val) {
       return time(val)
+    },
+    onPost(val) {
+      this.like++
+      this.commentList.unshift(val)
+      this.isCommentshow = false
+    },
+    totalCount(val) {
+      this.like = val
+    },
+    onReplyclick(val) {
+      this.replyComment = val
+      this.isReplyshow = true
     }
   }
 }

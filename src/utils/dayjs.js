@@ -10,6 +10,10 @@ dayjs.locale('zh-cn') // 全局使用
 export const time = (val) => {
   return dayjs().to(dayjs(val))
 }
+
+export const setTime = (time, val = 'YYYY-MM-DD HH:mm:ss') => {
+  return dayjs(time).format(val)
+}
 // 定义一个全局过滤器，然后就可以在任何组件的模板中使用了
 // 其实过滤器就相当于一个全局可用的方法（仅供模板使用)
 // 管道符前面的表达式的结果会作为参数传递到过滤器函数中/过滤器的返回值会渲染到使用过滤器的模板位置
