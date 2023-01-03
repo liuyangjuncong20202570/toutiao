@@ -48,6 +48,11 @@ const routes = [
     name: 'artical',
     props: true, // 开启路由传参，将动态参数存入该路由组件的props中
     component: () => import('@/views/artical')
+  },
+  {
+    path: '/user/profile', // 此处路由思路：由于每一篇文章的详情页都不同，所以这里采用动态路由进行跳转
+    name: 'userProfile',
+    component: () => import('@/views/user-profile')
   }
 ]
 

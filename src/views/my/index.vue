@@ -10,7 +10,7 @@
           <span class="name">{{ userinfo.name }}</span>
         </div>
         <div class="right">
-          <van-button size="mini" round>编辑资料</van-button>
+          <van-button to="/user/profile" size="mini" round>编辑资料</van-button>
         </div>
       </div>
       <!-- data-state放用户数据 -->
@@ -60,7 +60,13 @@
     <!-- /导航宫格 -->
     <van-cell title="消息通知" is-link />
     <van-cell title="小智同学" is-link class="xiaozhi" />
-    <van-cell v-if="user" @click="onlogout" title="退出登录" class="quit" clickable />
+    <van-cell
+      v-if="user"
+      @click="onlogout"
+      title="退出登录"
+      class="quit"
+      clickable
+    />
     <!-- 通知栏与退出登录 -->
   </div>
 </template>
