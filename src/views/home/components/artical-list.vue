@@ -4,7 +4,7 @@
 + List初始化后会触发一次load事件，用于加载第一屏的数据。＋如果一次请求加载的数据条数较少，导致列表内容无法铺满当前屏幕，List会继续触发1oad
 事件，直到内容铺满屏幕或数据全部加载完成。
  -->
-  <div class="artical-list">
+  <div class="artical-list" ref="articalList">
     <van-pull-refresh
       v-model="isLoading"
       @refresh="onRefresh"
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
 import ArticalItem from '@/components/artical-item/index.vue'
 import { getArticals } from '@/api/artical.js'
 export default {
@@ -53,8 +54,23 @@ export default {
       timestamp: null, // 请求加载下一页的时间戳
       error: false, // 控制请求失败后的逻辑处理
       isLoading: false, // 控制下拉后loading状态
-      refreshText: '刷新成功'
+      refreshText: '刷新成功',
+      scrollTop: 0 // 初始文章列表距离顶端的距离
     }
+  },
+  mounted() {
+    const articalList = this.$refs.articalList
+    articalList.addEventListener(
+      'scroll',
+      debounce(() => {
+        this.scrollTop = articalList.scrollTop
+      }, 50)
+    )
+  },
+  // 此生命周期函数与deactivated一样，都是和keep-alive配合使用，只有当组件被缓存或取消缓存时才会触发
+  activated() {
+    // 在mounted生命周期函数中获取的scrollTOp重新赋值给DOM的scrollTop做到记录滑动位置的效果
+    this.$refs.articalList.scrollTop = this.scrollTop
   },
   name: 'articalList',
   props: {

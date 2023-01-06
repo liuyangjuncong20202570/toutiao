@@ -36,7 +36,17 @@
     <!-- /已登陆状态 -->
     <!-- 未登录状态 -->
     <div v-else class="header no-login">
-      <div class="login-btn" @click="$router.push('/login')">
+      <div
+        class="login-btn"
+        @click="
+          $router.push({
+            name: 'login',
+            query: {
+              redirect: '/my'
+            }
+          })
+        "
+      >
         <img class="mobile-img" src="@/assets/mobile.png" alt="" />
         <span class="text">登录 / 注册</span>
       </div>
@@ -59,7 +69,7 @@
     </van-grid>
     <!-- /导航宫格 -->
     <van-cell title="消息通知" is-link />
-    <van-cell title="小智同学" is-link class="xiaozhi" />
+    <van-cell title="小智同学" to="user/chat" is-link class="xiaozhi" />
     <van-cell
       v-if="user"
       @click="onlogout"

@@ -131,8 +131,14 @@ export default {
         // 此处的toast之所以能够显示，是因为在vue中toast只能有一个，每出现新一个toast都会把之前的toast给覆盖掉
         this.$toast.success('登陆成功')
         // 通过vuex将返回来的token存至state中的user对象中
+        // 当重新登录后，使缓存组件重新加载，也就是将缓存数组中的数据清空
+        // 在重新加载页面时再让它重新缓存
+        this.$store.commit('deletecachePage', 'layoutIndex')
         // 当登陆成功后让页面跳转回原来的页面,但并不严谨
-        this.$router.back()
+        // this.$router.back()
+        // 这个query查询参数对象是由request.js传递过来的，里面的fullfath是之前跳转到login页面的地址
+        // 记住只有路由对象才有fullpath这个参数所以request传过来的地址是到$route里而不是$router（这个是导航对象）
+        this.$router.push(this.$route.query.redirect || '/home')
         this.$store.commit('setUser', data)
       } catch (error) {
         if (error.response.status === 400) {

@@ -12,5 +12,8 @@ module.exports = defineConfig({
         }
       }
     }
+  },
+  devServer: {
+    proxy: 'http://toutiao.itheima.net'
   }
 })

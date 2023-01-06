@@ -1,6 +1,9 @@
 <template>
   <div class="layout-container">
-    <router-view></router-view>
+    <!-- 此处加上keepalive是为了缓存二级路由，要不然只有一级路由在切换时才会缓存 -->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <!-- 子路由出口 -->
     <!-- tabbar标签栏 -->
     <!-- route  和 replace to的作用是vant开启路由模式 -->
@@ -46,7 +49,10 @@ export default {
   data() {
     return {}
   },
-  methods: {}
+  methods: {},
+  mounted() {
+    this.$store.commit('addcachePage', 'layoutIndex')
+  }
 }
 </script>
 

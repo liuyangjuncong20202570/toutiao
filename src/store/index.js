@@ -11,7 +11,8 @@ export default new Vuex.Store({
     // 因为本地存储中存储的是json格式，所以在给user赋值时要把格式转换回来
     user: getItem(TOKEN_KEY),
     channels: [],
-    searchHistories: getItem('TOUIAO_HISTORIES') || [] // 搜索记录数组
+    searchHistories: getItem('TOUIAO_HISTORIES') || [], // 搜索记录数组
+    cachePages: ['layoutIndex']
   },
   getters: {},
   mutations: {
@@ -38,6 +39,21 @@ export default new Vuex.Store({
     },
     deleteAllhistories(state) {
       state.searchHistories = []
+    },
+    // 添加缓存组件
+    addcachePage(state, pageName) {
+      // 只要cachePages中未含有pageName那么我们就把他插入到缓存数组中
+      if (!state.cachePages.includes(pageName)) {
+        state.cachePages.push(pageName)
+      }
+    },
+    // 移除缓存组件
+    deletecachePage(state, pageName) {
+      const index = state.cachePages.indexOf(pageName)
+      // 只要在cachePages中找到了该组件，那么我们就把它移除出缓存数组中
+      if (index !== -1) {
+        state.cachePages.splice(index, 1)
+      }
     }
   },
   actions: {},
